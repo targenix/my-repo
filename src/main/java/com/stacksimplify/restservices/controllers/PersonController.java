@@ -3,10 +3,14 @@ package com.stacksimplify.restservices.controllers;
 import java.util.List;
 import java.util.Optional;
 
+import javax.validation.Valid;
+import javax.validation.constraints.Min;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,11 +23,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import com.stacksimplify.restservices.entities.Person;
 import com.stacksimplify.restservices.exceptions.PersonExistsException;
+import com.stacksimplify.restservices.exceptions.PersonNameNotFoundException;
 import com.stacksimplify.restservices.exceptions.PersonNotFoundException;
 import com.stacksimplify.restservices.services.PersonService;
 
 //Controller
+
 @RestController
+@Validated
 public class PersonController {
 	
 	//Autowire the PersonService
@@ -44,7 +51,7 @@ public class PersonController {
 	//@PostMapping Annotation
 	@PostMapping("/persons")
 	
-	public ResponseEntity<Void> createPerson(@RequestBody Person person,UriComponentsBuilder builder)
+	public ResponseEntity<Void> createPerson(@Valid @RequestBody Person person,UriComponentsBuilder builder)
 	{ try {
 		 personService.createPerson(person);
 		 HttpHeaders headers = new HttpHeaders();
@@ -58,7 +65,7 @@ public class PersonController {
 	
 	//getPersonById
 	@GetMapping("/persons/{id}")
-	public Optional<Person> getPersonBy(@PathVariable("id")Long id){
+	public Optional<Person> getPersonBy(@PathVariable("id") @Min(1) Long id){
 		
 		try {
 			return personService.getPersonById(id);
@@ -90,8 +97,12 @@ public class PersonController {
 	
 	//getPersonByPersonname
 	@GetMapping("/persons/byusername/{username}")
-	public Person getPersonByUsername(@PathVariable("username")String username) {
-		return personService.getPersonByUsername(username);
+	public Person getPersonByUsername(@PathVariable("username")String username) throws PersonNameNotFoundException {
+		Person person = personService.getPersonByUsername(username);
+		if(person == null)
+		throw new PersonNameNotFoundException("Personname: '" + username + "'not found in Person repository' ");
+		return person;
 	}
+	
 
 }
