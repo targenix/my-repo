@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -31,6 +32,7 @@ import com.stacksimplify.restservices.services.PersonService;
 
 @RestController
 @Validated
+@RequestMapping(value = "/persons")
 public class PersonController {
 	
 	//Autowire the PersonService
@@ -39,7 +41,7 @@ public class PersonController {
 	
 	//getAllUsers Method
 	
-	@GetMapping("/persons")
+	@GetMapping
 	
 	public List<Person> getAllPersons(){
 		
@@ -49,7 +51,7 @@ public class PersonController {
 	//Create Person
 	//@RequestBody Annotation
 	//@PostMapping Annotation
-	@PostMapping("/persons")
+	@PostMapping
 	
 	public ResponseEntity<Void> createPerson(@Valid @RequestBody Person person,UriComponentsBuilder builder)
 	{ try {
@@ -64,7 +66,7 @@ public class PersonController {
 	}
 	
 	//getPersonById
-	@GetMapping("/persons/{id}")
+	@GetMapping("/{id}")
 	public Optional<Person> getPersonBy(@PathVariable("id") @Min(1) Long id){
 		
 		try {
@@ -77,7 +79,7 @@ public class PersonController {
 	}
 	
 	//updatePersonById
-	@PutMapping("/persons/{id}")
+	@PutMapping("/{id}")
 	public Person updatePersonById(@PathVariable("id") Long id,@RequestBody Person person) {
 		
 		try {
@@ -90,13 +92,13 @@ public class PersonController {
 	}
 	
 	//deletePersonById
-	@DeleteMapping("/persons/{id}")
+	@DeleteMapping("/{id}")
 	public void deletePersonById(@PathVariable("id")Long id) {
 		personService.deletePersonById(id);
 	}
 	
 	//getPersonByPersonname
-	@GetMapping("/persons/byusername/{username}")
+	@GetMapping("/byusername/{username}")
 	public Person getPersonByUsername(@PathVariable("username")String username) throws PersonNameNotFoundException {
 		Person person = personService.getPersonByUsername(username);
 		if(person == null)

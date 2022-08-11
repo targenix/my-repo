@@ -1,9 +1,12 @@
 package com.stacksimplify.restservices.entities;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
@@ -37,6 +40,9 @@ public class Person{
 	
 	@Column(name="SSN",length=50,nullable=false,unique=true)
 	private String ssn;
+	
+	@OneToMany(mappedBy="person")
+	private List<Order> orders;
 	
 	//No Argument Constructor
 
@@ -117,6 +123,14 @@ public class Person{
 	}
 	
 	
+	public List<Order> getOrders() {
+		return orders;
+	}
+
+	public void setOrders(List<Order> orders) {
+		this.orders = orders;
+	}
+
 	//To String-(optional)
 	@Override
 	public String toString() {
