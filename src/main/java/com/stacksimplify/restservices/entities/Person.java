@@ -4,6 +4,9 @@ import java.util.List;
 
 import org.springframework.hateoas.RepresentationModel;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +20,7 @@ import javax.validation.constraints.Size;
 //Entity
 @Entity
 @Table(name="person")
+@JsonIgnoreProperties({"firstname","lastname"})
 public class Person extends RepresentationModel<Person>{
 	
 	@Id
@@ -41,6 +45,7 @@ public class Person extends RepresentationModel<Person>{
 	private String role;
 	
 	@Column(name="SSN",length=50,nullable=false,unique=true)
+	@JsonIgnore
 	private String ssn;
 	
 	@OneToMany(mappedBy="person")
