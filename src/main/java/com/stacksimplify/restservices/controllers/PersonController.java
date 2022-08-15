@@ -67,7 +67,7 @@ public class PersonController {
 	
 	//getPersonById
 	@GetMapping("/{id}")
-	public Optional<Person> getPersonBy(@PathVariable("id") @Min(1) Long id){
+	public Optional<Person> getPersonById(@PathVariable("id") @Min(1) Long id){
 		
 		try {
 			return personService.getPersonById(id);
